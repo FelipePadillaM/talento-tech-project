@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>Información del usuario</h2>
+<div mat-dialog-content class="user-info-content">
+  <div class="avatar-section">
+    <img [src]="data.avatarUrl" alt="Avatar" class="avatar" />
+  </div>
+  <form>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nombre</mat-label>
+      <input matInput [(ngModel)]="data.name" name="name" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput [(ngModel)]="data.email" name="email" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Avatar URL</mat-label>
+      <input matInput [(ngModel)]="data.avatarUrl" name="avatarUrl" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Fecha de registro</mat-label>
+      <input matInput [value]="data.registeredAt" name="registeredAt" disabled />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Último inicio de sesión</mat-label>
+      <input matInput [value]="data.lastLogin" name="lastLogin" disabled />
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Cerrar</button>
+  <button mat-raised-button color="primary" (click)="save()">Guardar</button>
+</div>

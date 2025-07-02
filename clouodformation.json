@@ -1,0 +1,20 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Crea un bucket S3 con un nombre definido por el usuario",
+  "Parameters": {
+    "NombreBucket": {
+      "Type": "String",
+      "Description": "Nombre que tendrá el bucket S3"
+    }
+  },
+  "Resources": {
+    "MiBucketS3": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": {
+          "Ref": "NombreBucket"
+        }
+      }
+    }
+  }
+}

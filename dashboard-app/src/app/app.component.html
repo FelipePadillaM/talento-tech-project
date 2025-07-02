@@ -1,0 +1,28 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <mat-icon class="navbar-logo">dashboard</mat-icon>
+    <span class="navbar-title">Talento Tech</span>
+    <span class="spacer"></span>
+    <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Dashboard</a>
+    <a mat-button routerLink="/files" routerLinkActive="active">Archivos</a>
+    <a mat-button routerLink="/public-files" routerLinkActive="active">Archivos públicos</a>
+    <ng-container *ngIf="user$ | async as user">
+      <button mat-icon-button [matMenuTriggerFor]="userMenu" class="avatar-btn">
+        <img [src]="user.avatarUrl" alt="avatar" class="nav-avatar" />
+      </button>
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item (click)="showInfo(user)">
+          <mat-icon>info</mat-icon>
+          <span>Info</span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Cerrar sesión</span>
+        </button>
+      </mat-menu>
+    </ng-container>
+  </mat-toolbar-row>
+</mat-toolbar>
+<main>
+  <router-outlet></router-outlet>
+</main>

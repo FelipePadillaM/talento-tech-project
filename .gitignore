@@ -1,0 +1,47 @@
+# Node (Angular)
+node_modules/
+dist/
+.env
+
+# Angular build outputs
+/dashboard-app/.angular/cache/
+/dashboard-app/.angular/local/
+/dashboard-app/.angular/tmp/
+/dashboard-app/.angular/webpack/
+/dashboard-app/.angular/server/
+/dashboard-app/.angular/browser/
+/dashboard-app/.angular/test-output/
+
+# IDEs y editores
+.idea/
+.vscode/
+*.swp
+
+# Logs
+*.log
+
+# AWS Lambda
+*.zip
+__pycache__/
+*.pyc
+
+# CloudFormation
+*.temp
+*.bak
+
+# Java/Spring
+*.class
+*.jar
+*.war
+*.ear
+/target/
+/.classpath
+/.project
+/.settings/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Otros
+*.iml 

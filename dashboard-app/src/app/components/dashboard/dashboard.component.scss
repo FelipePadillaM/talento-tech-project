@@ -1,0 +1,55 @@
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+.user-card {
+  min-width: 320px;
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.avatar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+h2 {
+  margin: 0.5rem 0 0 0;
+  font-size: 2rem;
+}
+
+p {
+  color: #666;
+  margin: 0;
+}
+
+.dashboard-banner {
+  display: block;
+  margin: 0 auto 2rem auto;
+  max-width: 500px;
+  width: 100%;
+  height: auto;
+}
+
+.talento-title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #8c7ae6;
+  margin-top: 1.5rem;
+  letter-spacing: 0.05em;
+}

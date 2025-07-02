@@ -1,0 +1,60 @@
+.navbar-logo {
+  font-size: 2rem;
+  margin-right: 0.5rem;
+  color: #fff;
+}
+
+.navbar-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #fff;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+mat-toolbar {
+  background: #0a1a3c !important;
+  color: #fff !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+
+mat-toolbar-row {
+  align-items: center;
+  min-height: 64px;
+}
+
+a[mat-button] {
+  color: #fff !important;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  border: 1.5px solid transparent;
+  border-radius: 20px;
+  margin-left: 0.5rem;
+  padding: 0 1.2rem;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+
+a[mat-button].active, a[mat-button]:hover {
+  background: #132a56 !important;
+  color: #ffe082 !important;
+  border: 1.5px solid #fff;
+}
+
+.nav-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #3e5edb;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  background: #fff;
+}
+
+.avatar-btn {
+  margin-left: 1rem;
+  padding: 0;
+  background: transparent;
+}

@@ -1,0 +1,29 @@
+<div class="public-files-container">
+  <div class="public-files-header">
+    <span class="public-files-title">Archivos públicos de otros usuarios</span>
+  </div>
+  <table mat-table [dataSource]="publicFiles" class="mat-elevation-z2">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Nombre</th>
+      <td mat-cell *matCellDef="let file">{{ file.name }}</td>
+    </ng-container>
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef>Fecha</th>
+      <td mat-cell *matCellDef="let file">{{ file.date }}</td>
+    </ng-container>
+    <ng-container matColumnDef="owner">
+      <th mat-header-cell *matHeaderCellDef>Dueño</th>
+      <td mat-cell *matCellDef="let file">{{ file.owner }}</td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Acciones</th>
+      <td mat-cell *matCellDef="let file">
+        <button mat-icon-button color="primary" (click)="download(file)">
+          <mat-icon>download</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

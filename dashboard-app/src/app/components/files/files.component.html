@@ -1,0 +1,59 @@
+<div class="files-container">
+  <div class="files-header" *ngIf="user$ | async as user">
+    <span class="files-title">Archivos de {{ user.email }}</span>
+  </div>
+  <form class="upload-form" (submit)="$event.preventDefault()">
+    <input #fileInput type="file" (change)="onFileSelected($event)" hidden />
+    <button mat-raised-button color="primary" type="button" (click)="fileInput.click()">Seleccionar archivo</button>
+    <span *ngIf="selectedFile" class="file-name">{{ selectedFile.name }}</span>
+    <button mat-raised-button color="accent" type="button" (click)="uploadFile()" [disabled]="!selectedFile">Subir archivo</button>
+  </form>
+
+  <table mat-table [dataSource]="files || []" class="mat-elevation-z2" *ngIf="files$ | async as files">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Nombre</th>
+      <td mat-cell *matCellDef="let file">
+        <span *ngIf="!editingState[file.id]?.editing">{{ file.name }}</span>
+        <mat-form-field *ngIf="editingState[file.id]?.editing" appearance="outline" style="width: 150px;">
+          <input matInput [(ngModel)]="editingState[file.id].newName" name="newName-{{file.id}}" />
+        </mat-form-field>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef>Fecha</th>
+      <td mat-cell *matCellDef="let file">{{ file.date }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="privacy">
+      <th mat-header-cell *matHeaderCellDef>Privacidad</th>
+      <td mat-cell *matCellDef="let file">
+        <button mat-icon-button color="primary" (click)="togglePrivacy(file.id)">
+          <mat-icon>{{ file.isPublic ? 'public' : 'lock' }}</mat-icon>
+        </button>
+        <span>{{ file.isPublic ? 'Público' : 'Privado' }}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Acciones</th>
+      <td mat-cell *matCellDef="let file">
+        <button mat-icon-button color="accent" *ngIf="!editingState[file.id]?.editing" (click)="startEditing(file)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="primary" *ngIf="editingState[file.id]?.editing" (click)="renameFile(file.id)">
+          <mat-icon>check</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" *ngIf="editingState[file.id]?.editing" (click)="cancelEditing(file)">
+          <mat-icon>close</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="deleteFile(file.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
