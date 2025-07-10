@@ -1,0 +1,106 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "S3 bucket + CloudFront distribution with OAC (Origin Access Control) for static website hosting",
+    "Parameters": {
+        "NombreBucket": {
+          "Type": "String",
+          "Description": "Nombre que tendrá el bucket S3"
+        }
+      },
+    "Resources": {
+      "WebsiteBucket": {
+        "Type": "AWS::S3::Bucket",
+        "Properties": {
+          "BucketName": {
+            "Ref": "NombreBucket"
+            }
+        }
+      },
+      "OAC": {
+        "Type": "AWS::CloudFront::OriginAccessControl",
+        "Properties": {
+          "OriginAccessControlConfig": {
+            "Name": "S3-OAC-for-StaticSite",
+            "Description": "OAC for CloudFront to access S3 bucket",
+            "SigningBehavior": "always",
+            "SigningProtocol": "sigv4",
+            "OriginAccessControlOriginType": "s3"
+          }
+        }
+      },
+      "CloudFrontDistribution": {
+        "Type": "AWS::CloudFront::Distribution",
+        "Properties": {
+          "DistributionConfig": {
+            "Enabled": true,
+            "DefaultRootObject": "index.html",
+            "Origins": [
+              {
+                "Id": "S3Origin",
+                "DomainName": { "Fn::GetAtt": ["WebsiteBucket", "RegionalDomainName"] },
+                "S3OriginConfig": {},
+                "OriginAccessControlId": { "Ref": "OAC" }
+              }
+            ],
+            "DefaultCacheBehavior": {
+              "TargetOriginId": "S3Origin",
+              "ViewerProtocolPolicy": "redirect-to-https",
+              "AllowedMethods": ["GET", "HEAD"],
+              "CachedMethods": ["GET", "HEAD"],
+              "Compress": true,
+              "ForwardedValues": {
+                "QueryString": false,
+                "Cookies": { "Forward": "none" }
+              }
+            },
+            "CustomErrorResponses": [
+              {
+                "ErrorCode": 403,
+                "ResponsePagePath": "/index.html",
+                "ResponseCode": 200,
+                "ErrorCachingMinTTL": 0
+              },
+              {
+                "ErrorCode": 404,
+                "ResponsePagePath": "/index.html",
+                "ResponseCode": 200,
+                "ErrorCachingMinTTL": 0
+              }
+            ],
+            "ViewerCertificate": {
+              "CloudFrontDefaultCertificate": true
+            }
+          }
+        }
+      },
+      "BucketPolicy": {
+        "Type": "AWS::S3::BucketPolicy",
+        "Properties": {
+          "Bucket": { "Ref": "WebsiteBucket" },
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Sid": "AllowCloudFrontServicePrincipalReadOnly",
+                "Effect": "Allow",
+                "Principal": { "Service": "cloudfront.amazonaws.com" },
+                "Action": "s3:GetObject",
+                "Resource": { "Fn::Sub": "${WebsiteBucket}/*" },
+                "Condition": {
+                  "StringEquals": {
+                    "AWS:SourceArn": { "Fn::Sub": "arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}" }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Outputs": {
+      "CloudFrontURL": {
+        "Description": "CloudFront Distribution URL",
+        "Value": { "Fn::GetAtt": ["CloudFrontDistribution", "DomainName"] }
+      }
+    }
+  }

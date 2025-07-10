@@ -1,0 +1,53 @@
+# Binarios compilados
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Archivos de prueba
+*.test
+*.out
+
+# Archivos de cobertura
+*.cover
+
+# Archivos de Go
+*.o
+*.a
+
+# Directorio de dependencias
+vendor/
+
+# Archivos de configuración local
+.env
+.env.local
+.env.production
+
+# Directorio de uploads
+uploads/
+!uploads/.gitkeep
+
+# Logs
+*.log
+
+# Archivos temporales
+*.tmp
+*.temp
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+.dockerignore
+
+# Build artifacts
+dist/
+build/ 
