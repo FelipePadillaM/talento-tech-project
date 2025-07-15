@@ -1,0 +1,6 @@
+Pasos para montar infra:
+
+1. crear pila
+2. nombre s3 cloudfront (cloudfront-s3-talentotech-traine)
+3. subir archivos dist/dashboard-app/browser a s3 de cloudfront
+4. ir a cloudfront en general-> domain name -> abrir url front
