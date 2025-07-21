@@ -1,0 +1,7 @@
+services:
+  fastapi:
+    image: felipepadillam/fastapi-app:latest
+    ports:
+      - "8000:8000"
+    environment:
+      - AWS_DEFAULT_REGION=us-east-1

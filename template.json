@@ -1,20 +1,31 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "S3 bucket + CloudFront distribution with OAC (Origin Access Control) for static website hosting",
+  "Description": "Full infrastructure: S3 bucket + CloudFront distribution + EC2 instance with Docker",
   "Parameters": {
-    "NombreBucket": {
+    "CloudFrontS3BucketName": {
       "Type": "String",
-      "Description": "Nombre que tendrá el bucket S3"
+      "Description": "Name for the S3 bucket",
+      "Default": "cloudfront-s3-talentotech-traine1111"
+    },
+    "InstanceProfileName": {
+      "Type": "String",
+      "Description": "Name of the existing Instance Profile for the EC2 instance",
+      "Default": "EMR_EC2_DefaultRole"
+    },
+    "ExternalS3BucketName": {
+      "Type": "String",
+      "Description": "Name of the external S3 bucket",
+      "Default": "s3-config-to-ec2-try"
     }
   },
   "Resources": {
     "WebsiteBucket": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
-        "BucketName": { "Ref": "NombreBucket" }
+        "BucketName": { "Ref": "CloudFrontS3BucketName" }
       }
     },
-    "OAC": {
+    "OriginAccessControl": {
       "Type": "AWS::CloudFront::OriginAccessControl",
       "Properties": {
         "OriginAccessControlConfig": {
@@ -37,7 +48,7 @@
               "Id": "S3Origin",
               "DomainName": { "Fn::GetAtt": ["WebsiteBucket", "RegionalDomainName"] },
               "S3OriginConfig": {},
-              "OriginAccessControlId": { "Ref": "OAC" }
+              "OriginAccessControlId": { "Ref": "OriginAccessControl" }
             }
           ],
           "DefaultCacheBehavior": {
@@ -71,6 +82,46 @@
         }
       }
     },
+    "Ec2Instance": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "ImageId": "ami-0c02fb55956c7d316",
+        "InstanceType": "t2.micro",
+        "IamInstanceProfile": {
+          "Ref": "InstanceProfileName"
+        },
+        "SecurityGroups": [
+          {
+            "Ref": "Ec2SecurityGroup"
+          }
+        ],
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Sub": "#!/bin/bash\naws s3 cp s3://${ExternalS3BucketName}/public/init-ec2.sh /home/ec2-user/init-ec2.sh\nchmod +x /home/ec2-user/init-ec2.sh\n/home/ec2-user/init-ec2.sh"
+          }
+        }
+      }
+    },
+    "Ec2SecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Allow SSH and HTTP",
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 22,
+            "ToPort": 22,
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 8000,
+            "ToPort": 8000,
+            "CidrIp": "0.0.0.0/0"
+          }
+        ]
+      }
+    },
     "BucketPolicy": {
       "Type": "AWS::S3::BucketPolicy",
       "Properties": {
@@ -99,6 +150,21 @@
     "CloudFrontURL": {
       "Description": "CloudFront Distribution URL",
       "Value": { "Fn::GetAtt": ["CloudFrontDistribution", "DomainName"] }
+    },
+    "InstanceId": {
+      "Description": "EC2 Instance ID",
+      "Value": {
+        "Ref": "Ec2Instance"
+      }
+    },
+    "PublicIP": {
+      "Description": "EC2 Public IP",
+      "Value": {
+        "Fn::GetAtt": [
+          "Ec2Instance",
+          "PublicIp"
+        ]
+      }
     }
   }
 }

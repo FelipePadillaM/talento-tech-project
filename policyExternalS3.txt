@@ -1,0 +1,14 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "StatementPublicFiles",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::904336593093:role/EMR_EC2_DefaultRole"
+            },
+            "Action": "s3:getObject",
+            "Resource": "arn:aws:s3:::s3-config-to-ec2-try/public/*"
+        }
+    ]
+}
